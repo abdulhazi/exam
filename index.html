@@ -3368,10 +3368,21 @@ async function createRoom() {
   let code = "";
   for (let i = 0; i < 12 && !code; i++) { const c = String(Math.floor(100000 + Math.random() * 900000)); const m = await XDB.get(`exam/${c}/meta`).catch(() => "x"); if (m === null) code = c; }
   if (!code) { toast("Couldn't reach the exam server. Check the internet."); $("hOpen").disabled = false; return; }
-  const ex = H.exam;
-  await XDB.set(`exam/${code}/meta`, { host: XDB.uid, at: XDB.TS(), title: ex.pub.title, phase: "lobby", minutes: ex.minutes, classes: ex.classes || null, nq: ex.pub.qs.filter((q) => q.type !== "info").length, total: ex.total });
-  await XDB.set(`exam/${code}/key`, H.src);                                     // the answer key: only your account can read it
-  await XDB.set(`hosts/${XDB.uid}/${code}`, { title: ex.pub.title, at: XDB.TS() });  // "My exams"
+  const ex = H.exam; let step = "the room";
+  const W = (pr) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error("No answer from the exam server after 25 seconds")), 25000))]);
+  try {
+    await W(XDB.set(`exam/${code}/meta`, { host: XDB.uid, at: XDB.TS(), title: ex.pub.title, phase: "lobby", minutes: ex.minutes, classes: ex.classes || null, nq: ex.pub.qs.filter((q) => q.type !== "info").length, total: ex.total }));
+    step = "the answer key"; await W(XDB.set(`exam/${code}/key`, H.src));              // the answer key: only your account can read it
+    step = "your “My exams” list"; await W(XDB.set(`hosts/${XDB.uid}/${code}`, { title: ex.pub.title, at: XDB.TS() }));
+  } catch (e) {
+    XDB.set(`exam/${code}/meta`, null).catch(() => {});
+    $("hOpen").disabled = false;
+    const denied = /permission|denied/i.test(String(e && (e.code || e.message || e)));
+    modal(`<h3>Couldn't open the exam room</h3><p>The exam server refused to save <b>${step}</b>.</p>` + (denied
+      ? `<p>This almost always means the <b>database rules in Firebase are out of date</b>. Publish the latest <b>database.rules.json</b>:</p><ol><li>Firebase console → <b>Realtime Database</b> → <b>Rules</b> tab</li><li>Delete everything in the box and paste in the whole of database.rules.json</li><li>Click <b>Publish</b>, then try again</li></ol>`
+      : `<p>Check the internet connection and try again.</p>`) + `<p class="muted" style="font-size:13px">Details: ${xesc(String(e && (e.code || e.message) || e))}</p>`, [{ t: "OK", cls: "primary" }]);
+    return;
+  }
   openRoom(code);
 }
 function joinUrl() { return location.origin + location.pathname + "?code=" + H.code; }
