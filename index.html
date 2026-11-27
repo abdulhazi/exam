@@ -2571,11 +2571,12 @@ class WebPane {
     LAYOUT[which] = !LAYOUT[which]; saveLayout();
     lw.classList.toggle(which === "files" ? "nofiles" : "noprev", !LAYOUT[which]);
     const b = lw.querySelector(`[data-wtog="${which}"]`); if (b) b.classList.toggle("on", LAYOUT[which]);
-    if (which === "prev" && LAYOUT.prev) this.preview(false);
+    if (which === "prev" && LAYOUT.prev) this.preview(false, true);
     this.placeSug(this.ta() || document.body);
   }
   // typing refreshes the page quietly; "Reload page" opens it like a browser does (alerts on opening show up)
-  preview(full) { const v = this.lab.root.querySelector("[data-wview]"); if (v) { WEB_ASSETS = this.st.assets || {}; v.srcdoc = buildDoc(this.st.files, full ? true : 2, false); } }
+  // fresh=true swaps in a brand-new preview frame (Chrome can leave a frame that was hidden "asleep")
+  preview(full, fresh) { let v = this.lab.root.querySelector("[data-wview]"); if (v && fresh) { const n = document.createElement("iframe"); n.dataset.wview = "1"; n.setAttribute("sandbox", "allow-scripts"); v.replaceWith(n); v = n; } if (v) { WEB_ASSETS = this.st.assets || {}; v.srcdoc = buildDoc(this.st.files, full ? true : 2, false); } }
   syncHL(t) {
     const pre = t.closest(".wwrap").querySelector("pre"), g = this.lab.root.querySelector(".wgut");
     pre.innerHTML = highlight(t.value, this.cur()); pre.scrollTop = t.scrollTop; pre.scrollLeft = t.scrollLeft;
@@ -2585,7 +2586,7 @@ class WebPane {
   down(e) { if (!e.target.closest(".wsug")) this.hideSug(); return true; } move() { return false; } up() { return false; } dbl() { return true; } context() { return false; } change() { return false; }
   click(e) {
     const si = e.target.closest("[data-si]"); if (si) { const t = this.ta(); if (t) { this.sug.i = +si.dataset.si; this.accept(t); } return true; }
-    if (e.target.closest("[data-wreload]")) { this.preview(true); return true; }
+    if (e.target.closest("[data-wreload]")) { this.preview(true, true); return true; }
     const tg = e.target.closest("[data-wtog]"); if (tg) { this.toggle(tg.dataset.wtog); return true; }
     const im = e.target.closest("[data-wi]"); if (im) { this.showImg(im.dataset.wi); return true; }
     if (e.target.closest(".wimg")) { e.target.closest(".wimg").remove(); return true; }
