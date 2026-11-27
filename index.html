@@ -60,7 +60,14 @@ input,select,textarea{font:inherit;color:inherit}
 .emain{flex:1;min-width:0;display:flex;flex-direction:column}
 .qbox{flex:1;min-height:0;overflow:auto;padding:28px 36px}
 .qbox .qside{max-width:860px;margin:0 auto}
-.qbox.task{display:grid;grid-template-columns:minmax(260px,25%) 1fr;padding:0;overflow:hidden}.qbox.task .qtext{font-size:15.5px;line-height:1.55}
+.qbox.task{display:grid;grid-template-columns:var(--qw,24%) 6px 1fr;padding:0;overflow:hidden}.qbox.task.qhid{grid-template-columns:38px 0 1fr}
+.qcol{min-width:0;min-height:0;display:flex;overflow:hidden}.qcol .qside{flex:1;min-width:0}
+.qstrip{display:none;width:38px;flex:none;background:#fff;border-right:1px solid var(--line);cursor:pointer;flex-direction:column;align-items:center;gap:12px;padding-top:14px;color:var(--acc)}
+.qstrip:hover{background:#eef4ff}.qstrip span{writing-mode:vertical-rl;font-weight:700;letter-spacing:1px}
+.qbox.task.qhid .qside{display:none}.qbox.task.qhid .qsplit{visibility:hidden;pointer-events:none}.qbox.task.qhid .qstrip{display:flex}
+.qsplit{cursor:col-resize;background:#e5e9f2}.qsplit:hover{background:#bfd3ff}
+.qhide{float:right;margin:-4px -6px 6px 8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font:600 13px inherit;font-family:inherit;color:var(--soft);cursor:pointer}.qhide:hover{color:var(--acc);border-color:#9db7f2}
+body.dragging,body.dragging *{cursor:col-resize!important;user-select:none!important}body.dragging iframe{pointer-events:none}.qbox.task .qtext{font-size:15.5px;line-height:1.55}
 #exam.single .enav{display:none}
 .qbox.task .qside{padding:22px 22px;overflow:auto;border-right:1px solid var(--line);background:#fff;max-width:none;margin:0}
 .lab{min-width:0;min-height:0;position:relative}.labin{position:absolute!important;inset:0}
@@ -130,7 +137,7 @@ body.host{background:#eef1f7}
 .mtot{color:var(--acc)}.pageview{position:fixed;inset:20px;z-index:300;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}.pageview .pvh{display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}.pageview iframe{flex:1;border:0}
 .evlist{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:4px 10px;margin-bottom:6px}
 details{margin-top:14px}summary{cursor:pointer;color:var(--acc)}
-@media (max-width:900px){.live{grid-template-columns:1fr}.enav{width:170px}.qbox.task{grid-template-columns:1fr;grid-template-rows:auto 70vh;overflow:auto}}
+@media (max-width:900px){.live{grid-template-columns:1fr}.enav{width:170px}.qbox.task,.qbox.task.qhid{grid-template-columns:1fr;grid-template-rows:auto 70vh;overflow:auto}.qsplit{display:none}}
 
 </style>
 </head>
@@ -2500,7 +2507,11 @@ const WEB_CSS = `
 .lw .wfile:hover{background:#2a2d2e}.lw .wfile.on{background:#37373d;color:#fff}
 .lw .wfile img{width:22px;height:16px;object-fit:cover;border-radius:2px;flex:none;background:#444}
 .lw .wico{font:700 10px Consolas,monospace;width:22px;text-align:center;flex:none}.lw .wico.h{color:#e44d26}.lw .wico.c{color:#42a5f5}
-.lw .wleft{flex:1.1;min-width:0;display:flex;flex-direction:column;border-right:1px solid #333}
+.lw .wleft{flex:1 1 0;min-width:300px;display:flex;flex-direction:column}
+.lw .wtools{margin-left:auto;display:flex;gap:4px;align-self:center;padding-left:8px;flex:none}
+.lw .wtb{background:#3a3d41;border:0;color:#ccc;font:12.5px "Segoe UI",Arial;padding:4px 10px;border-radius:4px;cursor:pointer;white-space:nowrap}.lw .wtb:hover{background:#45494e}.lw .wtb.on{background:#0e639c;color:#fff}
+.lw .wsplit{width:6px;flex:none;cursor:col-resize;background:#2b2b2b;border-left:1px solid #333}.lw .wsplit:hover{background:#0e639c}
+.lw.nofiles .wexp{display:none}.lw.noprev .wright,.lw.noprev .wsplit{display:none}
 .lw .wtabs{height:34px;flex:none;background:#2d2d2d;display:flex;align-items:flex-end;gap:2px;padding:0 6px;overflow:hidden}
 .lw .wtab{padding:8px 14px;color:#aaa;cursor:pointer;border-top:2px solid transparent;font:13px Consolas,monospace;white-space:nowrap}
 .lw .wtab.on{background:#1e1e1e;color:#fff;border-top-color:#3794ff}
@@ -2514,7 +2525,7 @@ const WEB_CSS = `
 .lw .wsug{position:absolute;z-index:5;background:#252526;border:1px solid #454545;border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,.5);min-width:220px;max-width:340px;font:13px Consolas,monospace;padding:2px 0}
 .lw .wsi{display:flex;gap:10px;align-items:center;padding:3px 10px;cursor:pointer;white-space:nowrap}.lw .wsi.on{background:#04395e;color:#fff}
 .lw .wsi .wsl{flex:1;overflow:hidden;text-overflow:ellipsis}.lw .wsi .wsd{color:#8a8a8a;font:11.5px "Segoe UI",Arial}.lw .wsi .sw{width:11px;height:11px;border:1px solid #777;flex:none}
-.lw .wright{flex:1;min-width:0;display:flex;flex-direction:column;background:#fff}
+.lw .wright{flex:0 1 var(--pw,42%);min-width:220px;display:flex;flex-direction:column;background:#fff}
 .lw .wph{height:34px;flex:none;background:#f1f3f4;color:#444;display:flex;align-items:center;gap:8px;padding:0 8px 0 12px;font-size:12.5px;border-bottom:1px solid #ddd}
 .lw .wph button{margin-left:auto;background:#fff;border:1px solid #c7cbd1;border-radius:6px;padding:3px 10px;font:12.5px "Segoe UI",Arial;cursor:pointer}
 .lw iframe{flex:1;border:0;width:100%;background:#fff}
@@ -2524,6 +2535,17 @@ const WEB_CSS = `
 .lw .t-kw{color:#A78BFA}.lw .t-num{color:#FDBA74}.lw .t-blank{background:#FACC15;color:#0F172A;border-radius:3px}
 `;
 const PAIRS = { "(": ")", "[": "]", "{": "}", '"': '"', "'": "'" };
+// which panels a student keeps open, and how wide (remembered on this laptop)
+const LAYOUT = (() => { const d = { q: true, qw: 0, files: true, prev: true, pw: 0 }; try { return { ...d, ...JSON.parse(localStorage.getItem("exam_layout") || "{}") }; } catch (e) { return d; } })();
+const saveLayout = () => { try { localStorage.setItem("exam_layout", JSON.stringify(LAYOUT)); } catch (e) {} };
+// drag a divider: calls set(px) while dragging, then remembers it
+function dragSplit(bar, measure, set, done) {
+  bar.onpointerdown = (e) => {
+    e.preventDefault(); bar.setPointerCapture(e.pointerId); document.body.classList.add("dragging");
+    bar.onpointermove = (m) => set(measure(m));
+    bar.onpointerup = bar.onpointercancel = () => { bar.onpointermove = bar.onpointerup = null; document.body.classList.remove("dragging"); done(); };
+  };
+}
 class WebPane {
   constructor(lab) { this.lab = lab; this._t = 0; this.sug = null; this.prog = false; this.cw = 0; }
   get st() { return this.lab.st; }
@@ -2533,13 +2555,25 @@ class WebPane {
   html() {
     const f = this.cur(), code = this.st.files[f] || "", n = code.split("\n").length, assets = this.st.assets || {};
     const ico = (x) => (/\.css$/i.test(x) ? `<span class="wico c">#</span>` : /\.js$/i.test(x) ? `<span class="wico" style="color:#f1e05a">JS</span>` : `<span class="wico h">&lt;&gt;</span>`);
-    return `<div class="lw"><div class="wexp"><h6>Explorer</h6>${this.names().map((x) => `<div class="wfile ${x === f ? "on" : ""}" data-wf="${esc(x)}">${ico(x)}${esc(x)}</div>`).join("")}
+    return `<div class="lw ${LAYOUT.files ? "" : "nofiles"} ${LAYOUT.prev ? "" : "noprev"}" ${LAYOUT.pw ? `style="--pw:${LAYOUT.pw}px"` : ""}><div class="wexp"><h6>Explorer</h6>${this.names().map((x) => `<div class="wfile ${x === f ? "on" : ""}" data-wf="${esc(x)}">${ico(x)}${esc(x)}</div>`).join("")}
         ${Object.keys(assets).length ? `<h6 style="margin-top:8px">Images</h6>` + Object.keys(assets).map((x) => `<div class="wfile" data-wi="${esc(x)}" title="Click to see ${esc(x)}"><img src="${assets[x]}" alt="">${esc(x)}</div>`).join("") : ""}</div>
-      <div class="wleft"><div class="wtabs">${this.names().map((x) => `<div class="wtab ${x === f ? "on" : ""}" data-wf="${esc(x)}">${esc(x)}</div>`).join("")}</div>
+      <div class="wleft"><div class="wtabs">${this.names().map((x) => `<div class="wtab ${x === f ? "on" : ""}" data-wf="${esc(x)}">${esc(x)}</div>`).join("")}<span class="wtools"><button class="wtb ${LAYOUT.files ? "on" : ""}" data-wtog="files" title="Show or hide the list of files and images (Ctrl+B)">🗂 Files</button><button class="wtb ${LAYOUT.prev ? "on" : ""}" data-wtog="prev" title="Show or hide your page">👁 Page</button></span></div>
       <div class="wed"><div class="wgut">${[...Array(n).keys()].map((i) => i + 1).join("\n")}</div><div class="wwrap"><pre>${highlight(code, f)}</pre><textarea data-wcode="1" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off">${esc(code)}</textarea></div></div></div>
-      <div class="wright"><div class="wph">Your page<button data-wreload title="Open the page again, like refreshing the browser. Alerts that appear when the page opens show up then.">↻ Reload page</button></div><iframe data-wview="1" sandbox="allow-scripts"></iframe></div></div>`;
+      <div class="wsplit" title="Drag to make the page wider or narrower"></div><div class="wright"><div class="wph">Your page<button data-wreload title="Open the page again, like refreshing the browser. Alerts that appear when the page opens show up then.">↻ Reload page</button></div><iframe data-wview="1" sandbox="allow-scripts"></iframe></div></div>`;
   }
-  after() { this.preview(true); }
+  after() {
+    this.preview(true);
+    const lw = this.lab.root.querySelector(".lw"), bar = lw && lw.querySelector(".wsplit");
+    if (bar) dragSplit(bar, (m) => { const r = lw.getBoundingClientRect(); return Math.max(260, Math.min(r.width - 320, r.right - m.clientX)); }, (px) => { lw.style.setProperty("--pw", px + "px"); LAYOUT.pw = px; }, saveLayout);
+  }
+  toggle(which) {
+    const lw = this.lab.root.querySelector(".lw"); if (!lw) return;
+    LAYOUT[which] = !LAYOUT[which]; saveLayout();
+    lw.classList.toggle(which === "files" ? "nofiles" : "noprev", !LAYOUT[which]);
+    const b = lw.querySelector(`[data-wtog="${which}"]`); if (b) b.classList.toggle("on", LAYOUT[which]);
+    if (which === "prev" && LAYOUT.prev) this.preview(false);
+    this.placeSug(this.ta() || document.body);
+  }
   // typing refreshes the page quietly; "Reload page" opens it like a browser does (alerts on opening show up)
   preview(full) { const v = this.lab.root.querySelector("[data-wview]"); if (v) { WEB_ASSETS = this.st.assets || {}; v.srcdoc = buildDoc(this.st.files, full ? true : 2, false); } }
   syncHL(t) {
@@ -2552,6 +2586,7 @@ class WebPane {
   click(e) {
     const si = e.target.closest("[data-si]"); if (si) { const t = this.ta(); if (t) { this.sug.i = +si.dataset.si; this.accept(t); } return true; }
     if (e.target.closest("[data-wreload]")) { this.preview(true); return true; }
+    const tg = e.target.closest("[data-wtog]"); if (tg) { this.toggle(tg.dataset.wtog); return true; }
     const im = e.target.closest("[data-wi]"); if (im) { this.showImg(im.dataset.wi); return true; }
     if (e.target.closest(".wimg")) { e.target.closest(".wimg").remove(); return true; }
     const t = e.target.closest("[data-wf]"); if (t) { this.hideSug(); this.lab.st.file = t.dataset.wf; this.lab.render(); this.lab.quiet(); setTimeout(() => this.ta() && this.ta().focus(), 0); }
@@ -2625,6 +2660,7 @@ class WebPane {
     }
     if ((e.ctrlKey || e.metaKey) && k === "/") { e.preventDefault(); this.toggleComment(t, html); return true; }
     if ((e.ctrlKey || e.metaKey) && k === " ") { e.preventDefault(); this.updateSug(t); return true; }
+    if ((e.ctrlKey || e.metaKey) && k.toLowerCase() === "b") { e.preventDefault(); this.toggle("files"); return true; }
     if (e.ctrlKey || e.metaKey || e.altKey) return true;
     if (k === "Tab") {
       e.preventDefault();
@@ -3060,14 +3096,20 @@ function openQ(i) {
   ST.cur = Math.max(0, Math.min(i, ST.order.length - 1)); lsSave();
   const q = ST.order[ST.cur], task = TASK_TYPES.has(q.type), sec = ST.pub.sections[q.sec];
   const first = ST.cur === 0 || ST.order[ST.cur - 1].sec !== q.sec;
-  $("qbox").className = "qbox" + (task ? " task" : "");
-  $("qbox").innerHTML = `<div class="qside">
+  $("qbox").className = "qbox" + (task ? " task" : "") + (task && !LAYOUT.q ? " qhid" : "");
+  if (task && LAYOUT.qw) $("qbox").style.setProperty("--qw", LAYOUT.qw + "px");
+  $("qbox").innerHTML = `${task ? `<div class="qcol"><div class="qstrip" title="Show the question"><b>▶</b><span>Question</span></div>` : ""}<div class="qside">${task ? `<button class="qhide" title="Hide the question to make your workspace bigger">◀ Hide</button>` : ""}
       ${first && sec.title ? `<div class="sechead"><b>${xesc(sec.title)}</b>${sec.text ? `<div>${sec.text}</div>` : ""}</div>` : ""}
       ${q.type === "info" ? `<div class="qnum">Read this</div>` : `<div class="qnum">Question ${numOf(ST.cur)} of ${realQs().length}<span class="qpts">${q.pts} mark${q.pts === 1 ? "" : "s"}</span></div>`}
       <div class="qtext">${q.text}</div>${imgTag(q.img, q.imgW)}
       ${task ? `<p class="hintline">${{ python: "Write your program on the right. Press ▶ Run to test it. Your work is saved automatically.", web: "Edit the files on the right. Your page updates as you type. Your work is saved automatically.", excel: "Work in the spreadsheet on the right. Your work is saved automatically.", scratch: "Build your program on the right and click 🚩 to test it. Your work is saved automatically." }[q.type]}</p>` : ""}
       ${task ? "" : `<div class="ans" id="ans" data-q="${q.id}">${QT[q.type].render(q, ST.ans[q.id], ST.uid + ST.code)}</div>`}
-    </div>${task ? `<div class="lab" id="labRoot"></div>` : ""}`;
+    </div>${task ? `</div><div class="qsplit" title="Drag to make the question wider or narrower"></div><div class="lab" id="labRoot"></div>` : ""}`;
+  if (task) {
+    const box = $("qbox"), show = (on) => { LAYOUT.q = on; saveLayout(); box.classList.toggle("qhid", !on); };
+    box.querySelector(".qhide").onclick = () => show(false); box.querySelector(".qstrip").onclick = () => show(true);
+    dragSplit(box.querySelector(".qsplit"), (m) => { const r = box.getBoundingClientRect(); return Math.max(200, Math.min(r.width * 0.6, m.clientX - r.left)); }, (px) => { box.style.setProperty("--qw", px + "px"); LAYOUT.qw = px; }, saveLayout);
+  }
   if (task) labOpen($("labRoot"), q); else { ST.labQ = null; LAB_EL.remove(); }
   $("prevBtn").disabled = ST.cur === 0;
   $("nextBtn").textContent = ST.cur === ST.order.length - 1 ? "Review and submit ▶" : "Next ▶";
