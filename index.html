@@ -109,7 +109,7 @@ body.host{background:#eef1f7}
 .recent{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin:6px 0}
 .rhead{background:#16213a;color:#fff;padding:14px 24px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .rhead .code{font:800 40px Consolas,monospace;letter-spacing:4px;background:#fff;color:#16213a;border-radius:12px;padding:2px 16px}
-.rhead .lnk{font-size:15px;color:#b9c4dc}.rhead .lnk b{color:#fff;font-size:19px}
+.rhead .rlab{font-size:14px;color:#b9c4dc;margin-bottom:4px}.rhead .lnk b{display:block;color:#fff;font:800 40px "Segoe UI",Arial,sans-serif;letter-spacing:.5px;line-height:1.15}
 .pill{border-radius:999px;padding:4px 12px;font-size:13px;font-weight:700;background:#334155}.pill.live{background:#16a34a}.pill.ended{background:#64748b}.pill.lobby{background:#2563eb}
 .htimer{font:700 24px Consolas,monospace}.htimer.amber{color:#fbbf24}.htimer.red{color:#f87171}
 .tabs{display:flex;gap:4px;padding:0 24px;background:#16213a}.tabs button{background:none;border:0;color:#b9c4dc;font:600 15px inherit;font-family:inherit;padding:10px 16px;border-radius:10px 10px 0 0;cursor:pointer}.tabs button.on{background:#eef1f7;color:var(--ink)}
@@ -199,8 +199,9 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--acc)}
   <div id="hSum"></div><div id="hRecent"></div>
 </div></section>
 <section id="hRoom" class="hidden">
-  <div class="rhead"><div><div class="soft small" style="color:#b9c4dc">Exam code</div><div class="code" id="hCode"></div></div>
-    <div class="lnk">Students go to<br><b id="hLink"></b> <button class="btn small ghost" id="hCopy">Copy</button></div>
+  <div class="rhead"><div class="lnk"><div class="rlab">1 · Students go to</div><b id="hLink"></b></div>
+    <div><div class="rlab">2 · and type the code</div><div class="code" id="hCode"></div></div>
+    <button class="btn small ghost" id="hCopy" title="Copies a link that already has the code in it, e.g. to post in Google Classroom">Copy link</button>
     <div style="margin-left:auto;text-align:right"><div id="hTitle" style="font-weight:700;font-size:18px"></div><span class="pill" id="hPhase"></span> <span class="htimer hidden" id="hTimer"></span></div></div>
   <div class="tabs"><button id="tLive" class="on">Live</button><button id="tMark">Marking and results</button><span style="flex:1"></span><button id="hHome">◀ My exams</button></div>
   <div class="hwrap">
@@ -3420,7 +3421,7 @@ function joinUrl() { return location.origin + location.pathname + "?code=" + H.c
 function openRoom(code) {
   H.code = code; H.base = `exam/${code}`; localStorage.setItem("exam_host", JSON.stringify({ code }));
   show("hRoom"); setTab("live");
-  $("hCode").textContent = code.replace(/(\d{3})(\d{3})/, "$1 $2"); $("hLink").textContent = joinUrl().replace(/^https?:\/\//, "");
+  $("hCode").textContent = code.replace(/(\d{3})(\d{3})/, "$1 $2"); $("hLink").textContent = (location.host + location.pathname).replace(/\/(index\.html)?$/, "");
   $("hTitle").textContent = H.exam.pub.title; $("hMin").value = H.exam.minutes;
   let minSet = false;
   XDB.onValue(`${H.base}/meta`, (m) => { H.meta = m; if (m && !minSet) { minSet = true; if (m.minutes) $("hMin").value = m.minutes; } paintRoom(); });
