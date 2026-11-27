@@ -60,14 +60,18 @@ input,select,textarea{font:inherit;color:inherit}
 .emain{flex:1;min-width:0;display:flex;flex-direction:column}
 .qbox{flex:1;min-height:0;overflow:auto;padding:28px 36px}
 .qbox .qside{max-width:860px;margin:0 auto}
-.qbox.task{display:grid;grid-template-columns:var(--qw,24%) 6px 1fr;padding:0;overflow:hidden}.qbox.task.qhid{grid-template-columns:38px 0 1fr}
+.qbox.task{display:grid;grid-template-columns:var(--qw,28%) 6px 1fr;padding:0;overflow:hidden}.qbox.task.qhid{grid-template-columns:38px 0 1fr}
 .qcol{min-width:0;min-height:0;display:flex;overflow:hidden}.qcol .qside{flex:1;min-width:0}
 .qstrip{display:none;width:38px;flex:none;background:#fff;border-right:1px solid var(--line);cursor:pointer;flex-direction:column;align-items:center;gap:12px;padding-top:14px;color:var(--acc)}
 .qstrip:hover{background:#eef4ff}.qstrip span{writing-mode:vertical-rl;font-weight:700;letter-spacing:1px}
 .qbox.task.qhid .qside{display:none}.qbox.task.qhid .qsplit{visibility:hidden;pointer-events:none}.qbox.task.qhid .qstrip{display:flex}
 .qsplit{cursor:col-resize;background:#e5e9f2}.qsplit:hover{background:#bfd3ff}
 .qhide{float:right;margin:-4px -6px 6px 8px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font:600 13px inherit;font-family:inherit;color:var(--soft);cursor:pointer}.qhide:hover{color:var(--acc);border-color:#9db7f2}
-body.dragging,body.dragging *{cursor:col-resize!important;user-select:none!important}body.dragging iframe{pointer-events:none}.qbox.task .qtext{font-size:15.5px;line-height:1.55}
+body.dragging,body.dragging *{cursor:col-resize!important;user-select:none!important}body.dragging iframe{pointer-events:none}.qbox.task .qtext{font-size:16.5px;line-height:1.6}
+.qtext .ql{margin:0}.qtext .qn{margin-top:16px;padding-top:12px;border-top:1px solid #edf0f5}.qtext .qgap{height:10px}
+.qtext .qb{position:relative;padding-left:22px;margin-top:6px}.qtext .qb::before{content:"•";position:absolute;left:7px;color:var(--acc);font-weight:700}
+.qtext .qb2{margin-left:20px}.qtext .qi{padding-left:22px;margin-top:4px}.qtext .qcode{margin:8px 0}
+.qtext .qgap + .qn{border-top:0;padding-top:0;margin-top:6px}
 #exam.single .enav{display:none}
 .qbox.task .qside{padding:22px 22px;overflow:auto;border-right:1px solid var(--line);background:#fff;max-width:none;margin:0}
 .lab{min-width:0;min-height:0;position:relative}.labin{position:absolute!important;inset:0}
@@ -1903,7 +1907,16 @@ function fmt(t) {
   if (t == null) return "";
   const blocks = [];
   let s = String(t).replace(/```\w*\n?([\s\S]*?)```/g, (m, code) => { blocks.push(`<pre class="qcode">${xesc(code.replace(/\n$/, ""))}</pre>`); return `\u0000${blocks.length - 1}\u0000`; });
-  s = xesc(s).replace(/`([^`\n]+)`/g, "<code>$1</code>").replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>").replace(/\n/g, "<br>");
+  s = xesc(s).replace(/`([^`\n]+)`/g, "<code>$1</code>").replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>").replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>");
+  if (s.includes("\n")) s = s.split("\n").map((ln) => {      // several lines: each line is its own block (numbered items get space above, bullets are indented)
+    const tr = ln.trim();
+    if (/^\u0000\d+\u0000$/.test(tr)) return tr;
+    if (!tr) return '<div class="qgap"></div>';
+    const bl = ln.match(/^(\s*)(?:•|-)\s+(.*)$/); if (bl) return `<div class="ql qb${bl[1].length ? " qb2" : ""}">${bl[2]}</div>`;
+    if (/^\s{2,}/.test(ln)) return `<div class="ql qi">${tr}</div>`;
+    if (/^(<b>)?\d+([–-]\d+)?\.(<\/b>)?\s/.test(tr)) return `<div class="ql qn">${tr}</div>`;
+    return `<div class="ql">${tr}</div>`;
+  }).join("");
   return s.replace(/\u0000(\d+)\u0000/g, (m, i) => blocks[+i]).replace(/<br>(<pre)/g, "$1").replace(/(<\/pre>)<br>/g, "$1");
 }
 const qtext = (o) => (o.html != null ? String(o.html) : fmt(o.q != null ? o.q : o.text));
@@ -3057,13 +3070,15 @@ function paintLock() {
 }
 $("lockBtn").onclick = () => { ST.wasLocked = false; $("lock").classList.add("hidden"); goFull(); };
 // copying questions out and pasting text in from outside the exam are blocked (and pastes are logged)
+const clipNorm = (s) => String(s || "").replace(/\r/g, "").replace(/\s+/g, " ").trim();   // Windows adds \r to copied lines
 const inEditable = (t) => t && t.closest && (t.closest("input,textarea,select") || t.closest(".lab"));
-document.addEventListener("copy", (e) => { if (!watching()) return; if (!inEditable(e.target)) { e.preventDefault(); return; } const s = String(window.getSelection() || "") || (e.target.value || "").slice(e.target.selectionStart, e.target.selectionEnd); if (s) ST.copied.push(s.trim()); });
-document.addEventListener("cut", (e) => { if (!watching()) return; const t = e.target; const s = t.value ? t.value.slice(t.selectionStart, t.selectionEnd) : String(window.getSelection() || ""); if (s) ST.copied.push(s.trim()); });
+document.addEventListener("copy", (e) => { if (!watching()) return; if (!inEditable(e.target)) { e.preventDefault(); return; } const s = String(window.getSelection() || "") || (e.target.value || "").slice(e.target.selectionStart, e.target.selectionEnd); if (s) ST.copied.push(clipNorm(s)); });
+document.addEventListener("cut", (e) => { if (!watching()) return; const t = e.target; const s = t.value ? t.value.slice(t.selectionStart, t.selectionEnd) : String(window.getSelection() || ""); if (s) ST.copied.push(clipNorm(s)); });
 document.addEventListener("paste", (e) => {
   if (!watching()) return;
   const txt = ((e.clipboardData && e.clipboardData.getData("text")) || "").trim();
-  if (!txt || ST.copied.some((c) => c === txt || c.includes(txt))) return;
+  const n = clipNorm(txt);
+  if (!n || ST.copied.some((c) => c === n || c.includes(n))) return;
   e.preventDefault(); e.stopPropagation(); toast("Pasting text from outside the exam isn't allowed. Your teacher can see this.");
   logEv("paste", `tried to paste ${txt.length} characters from outside the exam: "${txt.slice(0, 60)}${txt.length > 60 ? "…" : ""}"`);
 }, true);
