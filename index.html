@@ -138,7 +138,14 @@ body.host{background:#eef1f7}
 .fname{font:600 13px Consolas,monospace;margin-top:6px}
 .titems{width:100%;border-collapse:collapse;margin:8px 0}.titems td{border-top:1px solid #eef1f6;padding:6px 6px;vertical-align:top;font-size:14px}.titems .tl{width:22%;font-weight:600}.titems .tx{white-space:pre-wrap;background:#f8fafc}.titems .tm{width:150px;white-space:nowrap}
 .titems input{width:52px;padding:4px 6px;border:1px solid #c9d2e3;border-radius:6px;margin-left:6px}.qbtn{width:30px;height:30px;border:1px solid #c9d2e3;background:#fff;border-radius:6px;margin-right:3px;cursor:pointer;font-weight:700}.qbtn.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-.mtot{color:var(--acc)}.pageview{position:fixed;inset:20px;z-index:300;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}.pageview .pvh{display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}.pageview iframe{flex:1;border:0}
+.mtot{color:var(--acc)}
+.hset{background:#f6f8fc;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:14px 0}.hsrow{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:6px 0}.hsrow>b{width:120px}
+.hsrow input[type=number]{width:76px;padding:6px 8px;border:1px solid #c9d2e3;border-radius:8px;font:inherit}.hsq{display:flex;gap:4px;margin-left:8px}
+.hscls{display:flex;flex-wrap:wrap;gap:6px 14px;flex:1}.hscls label{white-space:nowrap;cursor:pointer}
+.cvtabs{display:flex;gap:6px}.cvbody{flex:1;display:flex;overflow:auto;background:#1e1e1e;min-height:0}
+.cvgut,.cv{margin:0;padding:14px 10px;font:14px/1.55 Consolas,"Cascadia Mono",monospace;white-space:pre;tab-size:2}.cvgut{color:#6e7681;text-align:right;user-select:none;min-width:44px;position:sticky;left:0;background:#1e1e1e}.cv{color:#e2e8f0;flex:1}
+.cv .t-tag{color:#F97316}.cv .t-attr{color:#FACC15}.cv .t-str{color:#86EFAC}.cv .t-com{color:#64748B;font-style:italic}.cv .t-sel{color:#F472B6}.cv .t-prop{color:#38BDF8}.cv .t-kw{color:#A78BFA}.cv .t-num{color:#FDBA74}
+.cv .k{color:#c586c0}.cv .f{color:#dcdcaa}.cv .s{color:#ce9178}.cv .n{color:#b5cea8}.cv .c{color:#6a9955;font-style:italic}.cv .v{color:#9cdcfe}.cv .b{color:#569cd6}.pageview{position:fixed;inset:20px;z-index:300;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.45);display:flex;flex-direction:column;overflow:hidden}.pageview .pvh{display:flex;gap:12px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}.pageview iframe{flex:1;border:0}
 .evlist{max-height:260px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:4px 10px;margin-bottom:6px}
 details{margin-top:14px}summary{cursor:pointer;color:var(--acc)}
 @media (max-width:900px){.live{grid-template-columns:1fr}.enav{width:170px}.qbox.task,.qbox.task.qhid{grid-template-columns:1fr;grid-template-rows:auto 70vh;overflow:auto}.qsplit{display:none}}
@@ -1850,9 +1857,7 @@ function resolveAssets(text) {
 }
 const HARNESS = `<script>(function(){var A=window.__cq={alerts:[],errors:[],loaded:false,show:%SHOW%,rep:%REP%};
 window.alert=function(m){m=String(m);A.alerts.push(m);try{parent.__cqEvent&&A.rep&&parent.__cqEvent("alert",m);}catch(e){}
-if(A.show===true||(A.show===2&&A.loaded)){var d=document.createElement("div");d.setAttribute("style","position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:2147483647;background:#fff;color:#202124;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.35);padding:14px 16px 12px;width:300px;font:14px Arial");
-d.innerHTML="<div style=\\"font-weight:bold;margin-bottom:8px\\">This page says</div><div></div><div style=\\"text-align:right;margin-top:12px\\"><button style=\\"background:#0b57d0;color:#fff;border:0;border-radius:14px;padding:5px 16px;font-size:13px;cursor:pointer\\">OK</button></div>";
-d.children[1].textContent=m;d.querySelector("button").onclick=function(){d.remove()};(document.body||document.documentElement).appendChild(d);}};
+if(A.show===true||(A.show===2&&A.loaded)){var d=document.createElement("cq-alert");d.setAttribute("style","all:initial!important;display:block!important;position:fixed!important;left:50%!important;top:12px!important;transform:translateX(-50%)!important;z-index:2147483647!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;border:0!important;background:none!important");var r=d.attachShadow({mode:"open"});r.innerHTML='<style>.b{background:#fff;color:#202124;border-radius:8px;box-shadow:0 4px 18px rgba(0,0,0,.35);padding:14px 16px 12px;width:300px;font:14px Arial,sans-serif;text-align:left}.t{font-weight:bold;margin-bottom:8px}.m{white-space:pre-wrap;word-break:break-word}.r{text-align:right;margin-top:12px}button{background:#0b57d0;color:#fff;border:0;border-radius:14px;padding:5px 16px;font:13px Arial,sans-serif;cursor:pointer}</style><div class="b"><div class="t">This page says</div><div class="m"></div><div class="r"><button>OK</button></div></div>';r.querySelector(".m").textContent=m;r.querySelector("button").onclick=function(){d.remove()};(document.body||document.documentElement).appendChild(d);}};
 window.addEventListener("error",function(e){var t="Uncaught "+(e.error&&e.error.name?e.error.name+": "+e.error.message:e.message.replace(/^Uncaught /,""));A.errors.push(t);try{parent.__cqEvent&&A.rep&&parent.__cqEvent("error",t);}catch(x){}});
 window.addEventListener("load",function(){A.loaded=true;});})();<\/script>`;
 function buildDoc(files, visible, report, extra) {
@@ -3346,13 +3351,21 @@ function useSource(src, name, quiet) {
   if (quiet) return;
   const types = {}; ex.pub.qs.forEach((q) => { if (q.type !== "info") types[q.type] = (types[q.type] || 0) + 1; });
   $("hSum").innerHTML = `<div class="card sum"><h2>${xesc(ex.pub.title)}</h2>${ex.pub.subtitle ? `<p class="soft">${xesc(ex.pub.subtitle)}</p>` : ""}
-    <div class="facts"><div><b>${ex.pub.qs.filter((q) => q.type !== "info").length}</b>questions</div><div><b>${ex.total}</b>marks</div><div><b>${ex.minutes}</b>minutes</div><div><b>${ex.pub.sections.length}</b>section${ex.pub.sections.length > 1 ? "s" : ""}</div></div>
+    <div class="facts"><div><b>${ex.pub.qs.filter((q) => q.type !== "info").length}</b>questions</div><div><b>${ex.total}</b>marks</div><div><b id="hFactMin">${ex.minutes}</b>minutes</div><div><b>${ex.pub.sections.length}</b>section${ex.pub.sections.length > 1 ? "s" : ""}</div></div>
     <p>${Object.entries(types).map(([t, n]) => `<span class="chip">${TYPE_NAMES[t]} × ${n}</span>`).join(" ")}</p>
-    ${ex.classes ? `<p class="soft">Classes: ${ex.classes.map(xesc).join(", ")}</p>` : ""}
+    <div class="hset"><div class="hsrow"><b>Time allowed</b><input id="hSetMin" type="number" min="1" max="600" value="${ex.minutes}"> minutes
+      <span class="hsq">${[30, 45, 60, 80, 90, 120].map((m) => `<button class="btn small ghost" data-min="${m}">${m}</button>`).join("")}</span></div>
+      <div class="hsrow"><b>Who can join</b><span class="hscls">${[...new Set([...DEFAULT_CLASSES, ...(ex.classes || [])])].map((c) => `<label><input type="checkbox" data-cls="${xesc(c)}" ${!ex.classes || ex.classes.includes(c) ? "checked" : ""}> ${xesc(c)}</label>`).join("")}</span>
+      <button class="btn small ghost" id="hClsAll">All classes</button></div>
+      <p class="soft small">You can still change the time in the exam room, until you press Start.</p></div>
     ${ex.errs.length ? `<div class="err"><b>Fix these before starting:</b><br>${ex.errs.map(xesc).join("<br>")}</div>` : ""}
     <div class="row"><button class="btn ghost" id="hPrevBtn">👁 Preview as a student</button><button class="btn" id="hOpen" ${ex.errs.length ? "disabled" : ""}>Open the exam room ▶</button></div>
     <p class="soft small">Preview lets you answer the exam yourself and see how it would be marked. Nothing is saved.</p></div>`;
   $("hPrevBtn").onclick = startPreview; $("hOpen").onclick = createRoom;
+  const minShow = () => ($("hFactMin").textContent = Math.max(1, Math.round(+$("hSetMin").value) || ex.minutes));
+  $("hSetMin").oninput = minShow;
+  $("hSum").querySelectorAll("[data-min]").forEach((b) => (b.onclick = () => { $("hSetMin").value = b.dataset.min; minShow(); }));
+  $("hClsAll").onclick = () => $("hSum").querySelectorAll("[data-cls]").forEach((c) => (c.checked = true));
 }
 
 // ---------------------------------------------------------------- preview: the real student screen, offline, with a "mark my answers" button
@@ -3384,6 +3397,9 @@ async function createRoom() {
   for (let i = 0; i < 12 && !code; i++) { const c = String(Math.floor(100000 + Math.random() * 900000)); const m = await XDB.get(`exam/${c}/meta`).catch(() => "x"); if (m === null) code = c; }
   if (!code) { toast("Couldn't reach the exam server. Check the internet."); $("hOpen").disabled = false; return; }
   const ex = H.exam; let step = "the room";
+  ex.minutes = Math.max(1, Math.min(600, Math.round(+$("hSetMin").value) || ex.minutes));                  // the teacher's choices on the exam card
+  const picked = [...$("hSum").querySelectorAll("[data-cls]:checked")].map((c) => c.dataset.cls);
+  ex.classes = picked.length ? picked : null;
   const W = (pr) => Promise.race([pr, new Promise((_, rej) => setTimeout(() => rej(new Error("No answer from the exam server after 25 seconds")), 25000))]);
   try {
     await W(XDB.set(`exam/${code}/meta`, { host: XDB.uid, at: XDB.TS(), title: ex.pub.title, phase: "lobby", minutes: ex.minutes, classes: ex.classes || null, nq: ex.pub.qs.filter((q) => q.type !== "info").length, total: ex.total }));
@@ -3406,7 +3422,8 @@ function openRoom(code) {
   show("hRoom"); setTab("live");
   $("hCode").textContent = code.replace(/(\d{3})(\d{3})/, "$1 $2"); $("hLink").textContent = joinUrl().replace(/^https?:\/\//, "");
   $("hTitle").textContent = H.exam.pub.title; $("hMin").value = H.exam.minutes;
-  XDB.onValue(`${H.base}/meta`, (m) => { H.meta = m; paintRoom(); });
+  let minSet = false;
+  XDB.onValue(`${H.base}/meta`, (m) => { H.meta = m; if (m && !minSet) { minSet = true; if (m.minutes) $("hMin").value = m.minutes; } paintRoom(); });
   XDB.onValue(`${H.base}/s`, (s) => { H.st = s || {}; newEvents(); paintSoon(); });
   XDB.onValue(`${H.base}/ctl`, (c) => { H.ctl = c || {}; paintSoon(); });
   XDB.onValue(`${H.base}/mk`, (m) => { H.marks = m || {}; if (H.tab === "mark") paintMarks(); });
@@ -3576,9 +3593,9 @@ function markList(qid, uids) {
 function markItems(q, k, uids) {
   const btns = (u, i, pts, v) => `<span class="qb">${[...Array(pts + 1).keys()].map((n) => `<button class="qbtn ${v === n ? "on" : ""}" data-qb="${u}|${i}|${n}">${n}</button>`).join("")}</span>`;
   $("mbox").innerHTML = `<h3>Q${q.n} · ${TYPE_NAMES[q.type]} · ${q.pts} marks <span class="soft small">(${k.autoMax} by the computer, ${q.pts - k.autoMax} by you)</span></h3>
-    <p class="soft small">Click 0 or 1 for each item (or type the mark). Click "View page" to see the student's page. The computer's checks are under "Computer marks".</p>
+    <p class="soft small">Click 0 or 1 for each item (or type the mark). Click "View page" to see the student's page, or "View code" to read their files. The computer's checks are under "Computer marks".</p>
     <div class="mlist">${uids.map((u) => { const s = H.st[u], x = (H.marks[u] || {})[q.id] || {}, tt = x.tt ? JSON.parse(x.tt) : [], t = x.t || {}, d = x.d ? JSON.parse(x.d) : [], a = (H.ans[u] || {})[q.id];
-      return `<div class="mitem" data-u="${u}"><div class="mhead"><b>${xesc(s.info.name)}</b> <span class="soft">${xesc(s.info.cls || "")}</span>${q.type === "web" && a ? `<button class="btn small ghost" data-view="${u}">👁 View page</button>` : ""}<span class="mpts">Computer: <b>${x.a != null ? x.a : "–"}</b> / ${k.autoMax} · Total: <b class="mtot">${x.p != null ? x.p : "?"}</b> / ${q.pts}</span></div>
+      return `<div class="mitem" data-u="${u}"><div class="mhead"><b>${xesc(s.info.name)}</b> <span class="soft">${xesc(s.info.cls || "")}</span>${q.type === "web" && a ? `<button class="btn small ghost" data-view="${u}">👁 View page</button>` : ""}${(q.type === "web" || q.type === "python") && a ? `<button class="btn small ghost" data-code="${u}">&lt;/&gt; View code</button>` : ""}<span class="mpts">Computer: <b>${x.a != null ? x.a : "–"}</b> / ${k.autoMax} · Total: <b class="mtot">${x.p != null ? x.p : "?"}</b> / ${q.pts}</span></div>
         ${!x.tt && a == null ? `<p class="soft">No answer.</p>` : !x.tt ? `<p class="warn">Press Auto-mark first.</p>` : `<table class="titems">${k.teacher.map((it, i) => `<tr><td class="tl">${xesc(it.label)}</td><td class="tx">${tt[i] && tt[i][2] ? xesc(tt[i][2]) : `<span class="soft">(nothing written)</span>`}</td><td class="tm">${btns(u, i, it.pts, t["i" + i])}<input type="number" min="0" max="${it.pts}" step="0.5" data-ti="${u}|${i}" value="${t["i" + i] != null ? t["i" + i] : ""}"></td></tr>`).join("")}</table>`}
         ${d.length ? `<details><summary>Computer marks (${d.filter((r) => r[1]).length} of ${d.length} checks passed)</summary><div class="small">${d.map(([l, ok, err, w]) => `${ok ? "✅" : "❌"} ${xesc(l)}${w != null ? ` <span class="soft">[${w}]</span>` : ""}`).join("<br>")}</div></details>` : ""}
         <details><summary>Change the total by hand</summary><input type="number" min="0" max="${q.pts}" step="0.5" data-ov="${u}" value="${x.m ? x.p : ""}" placeholder="total"> / ${q.pts} <span class="soft small">(leave empty to use computer + your item marks)</span></details></div>`; }).join("")}</div>
@@ -3587,6 +3604,7 @@ function markItems(q, k, uids) {
   const box = $("mbox");
   box.querySelectorAll("[data-qb]").forEach((b) => (b.onclick = () => { const [u, i, n] = b.dataset.qb.split("|"); box.querySelector(`[data-ti="${u}|${i}"]`).value = n; b.parentElement.querySelectorAll(".qbtn").forEach((x) => x.classList.toggle("on", x === b)); }));
   box.querySelectorAll("[data-view]").forEach((b) => (b.onclick = () => viewPage((H.ans[b.dataset.view] || {})[q.id], k, H.st[b.dataset.view].info.name)));
+  box.querySelectorAll("[data-code]").forEach((b) => (b.onclick = () => viewCode((H.ans[b.dataset.code] || {})[q.id], q, H.st[b.dataset.code].info.name)));
   box.querySelectorAll("[data-x]").forEach((b) => (b.onclick = async () => {
     if (b.dataset.x === "1") {
       const ups = {};
@@ -3603,6 +3621,23 @@ function markItems(q, k, uids) {
   }));
 }
 // the student's page, as they built it
+// read-only view of a student's files, coloured like the editor, with line numbers
+function viewCode(a, q, name) {
+  const files = q.type === "python" ? { "main.py": (a && a.code) || "" } : (a && a.files) || {};
+  const names = Object.keys(files).sort((x, y) => (/\.html?$/i.test(y) - /\.html?$/i.test(x)) || x.localeCompare(y));
+  const d = document.createElement("div"); d.className = "pageview";
+  d.innerHTML = `<div class="pvh"><b>${xesc(name)}'s code</b><span class="cvtabs">${names.map((n, i) => `<button class="btn small ${i ? "ghost" : ""}" data-f="${xesc(n)}">${xesc(n)}</button>`).join("")}</span><span style="flex:1"></span><button class="btn small" data-close>Close</button></div><div class="cvbody"></div>`;
+  document.body.appendChild(d);
+  const show = (n) => {
+    const src = String(files[n] || ""), lines = src.replace(/\n$/, "").split("\n").length;
+    const hl = n.endsWith(".py") ? pyHL(src) : highlight(src, n);
+    d.querySelector(".cvbody").innerHTML = src.trim() ? `<pre class="cvgut">${[...Array(lines).keys()].map((i) => i + 1).join("\n")}</pre><pre class="cv">${hl}</pre>` : `<p class="soft" style="padding:20px">(This file is empty.)</p>`;
+    d.querySelectorAll("[data-f]").forEach((b) => b.classList.toggle("ghost", b.dataset.f !== n));
+  };
+  d.querySelectorAll("[data-f]").forEach((b) => (b.onclick = () => show(b.dataset.f)));
+  d.querySelector("[data-close]").onclick = () => d.remove();
+  if (names.length) show(names[0]); else d.querySelector(".cvbody").innerHTML = `<p class="soft" style="padding:20px">No code.</p>`;
+}
 function viewPage(a, k, name) {
   const d = document.createElement("div"); d.className = "pageview";
   d.innerHTML = `<div class="pvh"><b>${xesc(name)}'s page</b><span class="soft small">Alerts and buttons work here too.</span><span style="flex:1"></span><button class="btn small" data-close>Close</button></div><iframe sandbox="allow-scripts"></iframe>`;
