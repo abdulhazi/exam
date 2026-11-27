@@ -2511,6 +2511,8 @@ const WEB_CSS = `
 .lw .wtools{margin-left:auto;display:flex;gap:4px;align-self:center;padding-left:8px;flex:none}
 .lw .wtb{background:#3a3d41;border:0;color:#ccc;font:12.5px "Segoe UI",Arial;padding:4px 10px;border-radius:4px;cursor:pointer;white-space:nowrap}.lw .wtb:hover{background:#45494e}.lw .wtb.on{background:#0e639c;color:#fff}
 .lw .wsplit{width:6px;flex:none;cursor:col-resize;background:#2b2b2b;border-left:1px solid #333}.lw .wsplit:hover{background:#0e639c}
+/* the coloured layer must be able to scroll as far as the typing box (which has scrollbars on Windows), or the cursor drifts */
+.lw .wed .wwrap > pre,.lp .pwrap > pre{padding:10px 70px 70px 10px}.lw .wed > .wgut,.lp .pgut.pgut{padding-bottom:70px}
 .lw.nofiles .wexp{display:none}.lw.noprev .wright,.lw.noprev .wsplit{display:none}
 .lw .wtabs{height:34px;flex:none;background:#2d2d2d;display:flex;align-items:flex-end;gap:2px;padding:0 6px;overflow:hidden}
 .lw .wtab{padding:8px 14px;color:#aaa;cursor:pointer;border-top:2px solid transparent;font:13px Consolas,monospace;white-space:nowrap}
